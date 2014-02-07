@@ -92,7 +92,7 @@ class Path4(Location):
 
     name = "\nPath"
     descrip = """    Here a barely perceptible old path leads to the 
-    south and west. A kind of bridge can be seen to the west.\n"""
+    south and east. A kind of bridge can be seen to the west.\n"""
 
     def action(self):
         while True:
