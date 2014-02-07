@@ -29,7 +29,8 @@ class Machete(Thing):
 class Sample_Jar(Thing):
 
     name = "scientific collection jar"
-    descrip = """A fancy clear plastic container with some kind of electronics built into the base. The name of a bioengineering company is printed the top."""
+    descrip = """A fancy clear plastic container with some kind of electronics 
+built into the base. The name of a bioengineering company is printed on the top."""
 
 
 class Beef_Jerky(Thing):
@@ -60,6 +61,7 @@ class Compass(Thing):
 
     name = "compass"
     descrip = """A large, old-style analog device, with a glass face and a perky needle that always points north."""
+
 
 class Basket(Thing):
     """

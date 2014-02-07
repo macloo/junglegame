@@ -5,9 +5,11 @@ A simple text-only Python game based on exercise 45 in Zed Shaw's free online bo
 
 This exercise is supposed to teach us (beginners) more about object-oriented programming concepts. In a previous exercise, we started building a game with skeleton classes provided by Zed. This time, we start from scratch and design our own text game (like Zork or Adventure). 
 
+In ex. 43, everything was coded in a single .py file. Now, in ex. 45, we are tasked with using multiple files (modules). 
+
 ## Current Status
 
-At this point, most things do not run yet. However, you can step through a few locations, and nothing throws an error
+At this point, most things do not run yet. However, you can step through a few locations, and nothing throws an error. 
 
 
 ## Game History
