@@ -5,7 +5,8 @@ import things
 
 class Location(object):
     """
-    Parent class for all locations in the game. Location 00.
+    Parent class for all locations in the game. Location 00. Lots of 
+    functions here because they are available in all locations.
     """
 
     def __init__(self):
@@ -13,6 +14,7 @@ class Location(object):
         self.first_visit = True
 
     def enter(self):
+    # announce the current location when you enter it
         print self.name
         if self.first_visit:
             print self.descrip
@@ -20,14 +22,33 @@ class Location(object):
         self.list_items()
 
     def list_items(self):
+    # announce all items available in your current location
         if self.items:
             for item in self.items:
                 print "    There is a %s here" % item.name
             print
 
+    def check_for_things(self, r):
+    # find out which and how many things you named in your response
+        t = []
+        for item in self.items:
+            if item.nickname in r:
+                t.append(item)
+        return t
+
+    def take_inventory(self):
+    # lists all things that you are carrying
+        if things.inventory:
+            print "You are carrying:"
+                for item in things.inventory:
+                    print item.name
+        else:
+            "You are not carrying anything."
+
     def use_item(self, r, t):
         """
-        This function runs if you have typed the name of ANY item.
+        This function runs if you have typed the name of ANY item in
+        your response.
         
         Things to do: 
         Remove items from location when they have been picked up. 
@@ -499,9 +520,8 @@ class Vehicle_Clearing(Location):
         self.whistle = things.Whistle()
         self.compass = things.Compass()
         
-        self.items = [self.raft, self.machete, self.jar, 
-                      self.jerky, self.flash, self.rope, 
-                      self.whistle, self.compass]
+        self.items = [self.raft, self.machete, self.jar, self.jerky, 
+                self.flash, self.rope, self.whistle, self.compass]
 
     name = "\nClearing"
     descrip = """    Your vehicle, a powerful but compact 4WD, is parked in
@@ -513,23 +533,18 @@ class Vehicle_Clearing(Location):
         while True:
             response = raw_input("> ")
             if self.items:
-                t = []
-                for item in self.items:
-                    if item.nickname in response:
-                        t.append(item)
+                t = self.check_for_things(response)
             if len(t) > 0:
                 self.use_item(response, t)
             elif "look" in response:
                 print self.descrip
                 self.list_items()
             elif "inventory" in response or response == "i":
-                print "You are carrying:"
-                for item in things.inventory:
-                    print item.name
+                self.take_inventory()
             else:
-                return self.defaults(response)
+                return self.travel(response)
 
-    def defaults(self, r):
+    def travel(self, r):
         if "north" in r or r == 'n':
             return '28'
         elif "river" in r or ("west" in r or r == 'w'):
