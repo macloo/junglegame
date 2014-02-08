@@ -41,7 +41,7 @@ is printed on the top."""
 
 class Beef_Jerky(Thing):
 
-    name = "beef jerky"
+    name = "packet of beef jerky"
     nickname = "jerky"
     descrip = """A plastic packet of good-quality dried meat for 
 keeping your energy levels up."""
