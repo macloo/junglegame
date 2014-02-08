@@ -11,6 +11,8 @@ In ex. 43, everything was coded in a single .py file. Now, in ex. 45, we are tas
 
 At this point, most things do not run yet. However, you can step through a few locations, and nothing throws an error. 
 
+In location 27 (game starting point), you can pick up and drop items. Can't do much else with them yet.
+
 
 ## Game History
 
@@ -19,3 +21,5 @@ Feb. 4, 2014 - Started the exercise. Drew game map on paper. Listed all items an
 Feb. 6 - Coded skeleton classes for all game locations. Made a dictionary (map) for all game locations. Made Engine class to run the game. 
 
 Feb. 7 - Created skeleton classes for all game items. These are things that can be picked up, carried, and used. First commit to GitHub. 
+
+Feb. 8 - Added function use_item() to Location() class. Not finished yet, but it allows the player to pick up, drop, and examine items that are found in the game. Also worked out a new function -- defaults() -- for handling directional movement from one location to another. That required a rewrite of the Engine() class.

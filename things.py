@@ -17,50 +17,58 @@ class Thing(object):
 class Raft(Thing):
 
     name = "raft"
-    descrip = """A heavy-duty inflatable boat, fully inflated, and large enough to carry two people safely."""
+    descrip = """A heavy-duty inflatable boat, fully inflated, and 
+large enough to carry two people safely."""
 
 
 class Machete(Thing):
 
     name = "machete"
-    descrip = """A long, broad, sharp blade with a wooden handle, about 14 inches long."""
+    descrip = """A long, broad, sharp blade with a wooden handle, 
+about 14 inches long."""
 
 
 class Sample_Jar(Thing):
 
     name = "scientific collection jar"
-    descrip = """A fancy clear plastic container with some kind of electronics 
-built into the base. The name of a bioengineering company is printed on the top."""
+    descrip = """A fancy clear plastic container with some kind of 
+electronics built into the base. The name of a bioengineering company 
+is printed on the top."""
 
 
 class Beef_Jerky(Thing):
 
     name = "beef jerky"
-    descrip = """A plastic packet of good-quality dried meat for keeping your energy levels up."""
+    descrip = """A plastic packet of good-quality dried meat for 
+keeping your energy levels up."""
 
 
 class Flashlight(Thing):
 
     name = "flashlight"
-    descrip = """A long metal torch, packed with heavy D batteries. It weighs a lot."""
+    descrip = """A long metal torch, packed with heavy D batteries. 
+It weighs a lot."""
 
 
 class Rope(Thing):
 
     name = "rope"
-    descrip = """A large coil of nylon rope, suitable for rock climbing."""
+    descrip = """A large coil of nylon rope, suitable for rock 
+climbing."""
 
 
 class Whistle(Thing):
 
     name = "whistle"
-    descrip = """A sturdy plastic model from a trekking outfitter, this will emit a piercing loud sound."""
+    descrip = """A sturdy plastic model from a trekking outfitter, 
+this will emit a piercing loud sound."""
 
 
 class Compass(Thing):
 
     name = "compass"
-    descrip = """A large, old-style analog device, with a glass face and a perky needle that always points north."""
+    descrip = """A large, old-style analog device, with a glass face 
+and a perky needle that always points north."""
 
 
 class Basket(Thing):
@@ -68,6 +76,7 @@ class Basket(Thing):
     This is found in location 5.
     """
     name = "basket"
-    descrip = """A battered old traditional basket, wide and shallow, woven from grass or reeds."""
+    descrip = """A battered ancient traditional basket, wide and 
+shallow, woven from grass or reeds."""
 
 
