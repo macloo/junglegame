@@ -515,7 +515,7 @@ class Vehicle_Clearing(Location):
             if self.items:
                 t = []
                 for item in self.items:
-                    if item.name in response:
+                    if item.nickname in response:
                         t.append(item)
             if len(t) > 0:
                 self.use_item(response, t)
