@@ -7,6 +7,8 @@ class Location(object):
     """
     Parent class for all locations in the game. Location 00. Lots of 
     functions here because they are available in all locations.
+    - action() is the crucial function
+    - response (variable) stores the interaction from the player
     """
 
     def __init__(self):
@@ -21,6 +23,28 @@ class Location(object):
             self.first_visit = False
         self.list_items()
 
+    def action(self):
+    # runs in all location classes - Engine() makes it so 
+        t = []
+        while True:
+            response = raw_input("> ")
+            if self.items or things.inventory:
+                t = self.check_for_things(response)
+            if len(t) > 0:
+                self.use_item(response, t)
+            elif "look" in response:
+                print self.descrip
+                self.list_items()
+            elif "inventory" in response or response == "i":
+                self.take_inventory()
+            elif "drop" in response:
+                self.drop_all(response)
+            elif "take" in response:
+                print "What do you want to take?"
+            else:
+                return self.travel(response)
+                # this is particular to each location
+
     def list_items(self):
     # announce all items available in your current location
         if self.items:
@@ -34,25 +58,29 @@ class Location(object):
         for item in self.items:
             if item.nickname in r:
                 t.append(item)
+        for item in things.inventory:
+            if item.nickname in r:
+                t.append(item)
         return t
 
     def take_inventory(self):
     # lists all things that you are carrying
         if things.inventory:
             print "You are carrying:"
-                for item in things.inventory:
-                    print item.name
+            for item in things.inventory:
+                print item.name
         else:
-            "You are not carrying anything."
+            print "You are not carrying anything."
 
     def use_item(self, r, t):
         """
         This function runs if you have typed the name of ANY item in
-        your response.
+        your response. It handles all generic manipulations of the items: 
+        look, take, drop
+        
+        It will NOT run if you did not include an item name in your response.
         
         Things to do: 
-        Remove items from location when they have been picked up. 
-        Un-remove them if you drop them.
         Make raft special: Can pick up only if you are not carrying anything 
         else.
         Ability to put things into the raft. 
@@ -63,24 +91,43 @@ class Location(object):
         elif "look" in r:
             print t[0].descrip, "\n"
         elif "take" in r:
-            if len(things.inventory) < 4:  # this works now 
+            if t[0] in things.inventory:
+                print "You are already carrying the %s." % t[0].name
+            elif not t[0] in self.items:
+                print "There is no %s here." % t[0].name
+            elif len(things.inventory) < 4:
                 things.inventory.append(t[0])
+                self.items.remove(t[0])
                 print "You are now carrying the %s." % t[0].name
             else:
-                print "You cannot take the %s. You are carrying " % t[0].name
-                print "too many things already."
-                print 'Type "inventory" or "i" to see what you\'ve got.'
+                print '''You cannot take the %s. You are carrying too many things already.\n''' % t[0].name
+                print 'Type "inventory" or "i" to see what you\'ve got.\n'
         elif "drop" in r:
             # if item is in inventory, can drop
             if t[0] in things.inventory:
-                things.inventory.remove(t[0])  # this works
+                things.inventory.remove(t[0])
+                self.items.append(t[0])
                 print "You drop the %s." % t[0].name
-            elif not things.inventory:
-                print "You are not carrying anything."
             else:
-                print "You are not carrying the %s." % t[0].name
+                print "You are not carrying any %s." % t[0].name
         else:
             print "What do you want to do with the %s?" % t[0].name
+
+    def drop_all(self, r):
+    # runs when "drop" appears in response but no items were named 
+        if r == "drop":
+            print "Drop what? Give us a hint!"
+        elif "all" in r or "everything" in r:
+            if things.inventory:
+                for item in things.inventory:
+                    print "%s dropped" % item.name
+                    self.items.append(item)
+                print
+                things.inventory = []
+            else:
+                print "You are not carrying anything."
+        else:
+            print "What do you want to drop?"
 
 
 class Bongo_Glade(Location):
@@ -182,13 +229,14 @@ class Path5(Location):
 
     def __init__(self):
         self.basket = things.Basket()
-
         self.items = [self.basket.name]
 
     name = "\nPath"
     descrip = """    The path ends here, choked off by dense foliage
     and thick, twisted vines. An ancient basket, woven from 
     grasses or reeds, lies on the ground.\n"""
+    descrip2 = """    The path ends here, choked off by dense foliage
+    and thick, twisted vines.\n"""
 
     def action(self):
         while True:
@@ -495,17 +543,27 @@ class South_River(Location):
     Location 26.
     """
 
-    name = "River"
-    descrip = """    The   
-    There is """
+    name = "\nRiver"
+    descrip = """    This wide, unnamed river is deep and hazardous. The 
+    far bank lies to the west of where you stand. This is one 
+    of the relatively few rivers in the world that flow north.\n"""
 
-    def action(self):
-        return '27'
+    def travel(self, r):
+        if "river" in r or ("north" in r or r == 'n'):
+            return "You can only go downriver if you use the raft."
+        elif "east" in r or r == 'e':
+            return '27'
+        elif "south" in r or r == 's':
+            return "You cannot go upriver. The current is too swift."
+        elif "west" in r or r == 'w':
+            return "It is impossible to cross to the west bank of the river here."
+        else:
+            return None
 
 
 class Vehicle_Clearing(Location):
     """
-    Location 27.
+    Location 27. This is where the game always begins.
     """
 
     def __init__(self):
@@ -529,30 +587,15 @@ class Vehicle_Clearing(Location):
     disappears into the jungle to the north. A wide river 
     lies in front of you. The clearing extends to the south.\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if self.items:
-                t = self.check_for_things(response)
-            if len(t) > 0:
-                self.use_item(response, t)
-            elif "look" in response:
-                print self.descrip
-                self.list_items()
-            elif "inventory" in response or response == "i":
-                self.take_inventory()
-            else:
-                return self.travel(response)
-
     def travel(self, r):
         if "north" in r or r == 'n':
             return '28'
-        elif "river" in r or ("west" in r or r == 'w'):
-            return '26'
-        elif "south" in r or r == 's':
-            return '31'
         elif "east" in r or r == 'e':
             return "You can't go that way."
+        elif "south" in r or r == 's':
+            return '31'
+        elif "river" in r or ("west" in r or r == 'w'):
+            return '26'
         else:
             return None
 
@@ -568,15 +611,17 @@ class Dirt_Road(Location):
     to this lonely place, where you hope to find the greatest
     scientific discovery of your career.\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "south" in response or response == 's':
-                return '27'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You came from that direction in your 4WD."
+        elif "east" in r or r == 'e':
+            return "A deep ravine blocks your way."
+        elif "south" in r or r == 's':
+            return '27'
+        elif "west" in r or r == 'w':
+            return ("You can hear the river, but the forest growth is too thick. \nIt's impossible to break through in that direction.")
+        else:
+            return None
 
 
 class Dense_Forest29(Location):
@@ -597,12 +642,24 @@ class South_Bridge(Location):
     Location 30.
     """
 
-    name = "Bridge"
-    descrip = """    The   
-    There is """
+    name = "\nLog Bridge"
+    descrip = """    This bridge (if you can call it a bridge) consists of   
+    one very long log and a kind of rope made from twisted plant 
+    fibers or thin vines. Moss covers the log, which is rather 
+    narrow. The rope is strung between two upright trees so 
+    you can hold on to it while crossing.\n"""
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "If you went that way, you would be in the river."
+        elif "east" in r or r == 'e':
+            return '31'
+        elif "south" in r or r == 's':
+            return "If you went that way, you would be in the river."
+        elif "west" in r or r == 'w':
+            return "You can't go that way yet."
+        else:
+            return None
 
 
 class Clearing31(Location):
@@ -615,17 +672,18 @@ class Clearing31(Location):
     You can see your 4WD vehicle to the north. A bridge 
     lies to the west.\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "north" in response or response == 'n':
-                return '27'
-            elif "west" in response or response == 'w':
-                return '30'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '27'
+        elif "east" in r or r == 'e':
+            return "A deep ravine blocks your way."
+        elif "south" in r or r == 's':
+            return "The jungle is much too dense in that direction."
+        elif "west" in r or r == 'w':
+            return '30'
+        else:
+            return None
+
 
 # dictionary for all locations 
 loc_code_map = {
