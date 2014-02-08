@@ -4,7 +4,8 @@ import locations
 
 class Engine(object):
     """
-    Runs the game.
+    Runs the game by moving you from one location to the next. That's
+    really all it does. All actions take place in the location classes.
     """
 
     def play(self, starting_loc):
