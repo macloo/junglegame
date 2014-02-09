@@ -45,13 +45,6 @@ class Location(object):
                 return self.travel(response)
                 # this is particular to each location
 
-    def list_items(self):
-    # announce all items available in your current location
-        if self.items:
-            for item in self.items:
-                print "    There is a %s here" % item.name
-            print
-
     def check_for_things(self, r):
     # find out which and how many things you named in your response
         t = []
@@ -63,6 +56,13 @@ class Location(object):
                 t.append(item)
         return t
 
+    def list_items(self):
+    # announce all items available in your current location
+        if self.items:
+            for item in self.items:
+                print "    There is a %s here" % item.name
+            print
+
     def take_inventory(self):
     # lists all things that you are carrying
         if things.inventory:
@@ -72,62 +72,90 @@ class Location(object):
         else:
             print "You are not carrying anything."
 
-    def use_item(self, r, t):
-        """
-        This function runs if you have typed the name of ANY item in
-        your response. It handles all generic manipulations of the items: 
-        look, take, drop
-        
-        It will NOT run if you did not include an item name in your response.
-        
-        Things to do: 
-        Make raft special: Can pick up only if you are not carrying anything 
-        else.
-        Ability to put things into the raft. 
-        Cannot pick up raft if anything is in it. 
-        """
-        if len(t) > 1:
-            print "You can only deal with one item at a time."
-        elif "look" in r:
-            print t[0].descrip, "\n"
-        elif "take" in r:
-            if t[0] in things.inventory:
-                print "You are already carrying the %s." % t[0].name
-            elif not t[0] in self.items:
-                print "There is no %s here." % t[0].name
-            elif len(things.inventory) < 4:
-                things.inventory.append(t[0])
-                self.items.remove(t[0])
-                print "You are now carrying the %s." % t[0].name
-            else:
-                print '''You cannot take the %s. You are carrying too many things already.\n''' % t[0].name
-                print 'Type "inventory" or "i" to see what you\'ve got.\n'
-        elif "drop" in r:
-            # if item is in inventory, can drop
-            if t[0] in things.inventory:
-                things.inventory.remove(t[0])
-                self.items.append(t[0])
-                print "You drop the %s." % t[0].name
-            else:
-                print "You are not carrying any %s." % t[0].name
-        else:
-            print "What do you want to do with the %s?" % t[0].name
-
     def drop_all(self, r):
     # runs when "drop" appears in response but no items were named 
         if r == "drop":
             print "Drop what? Give us a hint!"
         elif "all" in r or "everything" in r:
             if things.inventory:
-                for item in things.inventory:
-                    print "%s dropped" % item.name
-                    self.items.append(item)
-                print
+                for i in things.inventory:
+                    print "%s dropped" % i.name
+                    self.items.append(i)
+                    if i.name == "raft":
+                        things.carrying_raft = False
                 things.inventory = []
+                print
             else:
                 print "You are not carrying anything."
         else:
             print "What do you want to drop?"
+
+    def use_item(self, r, t):
+        """
+        This function runs if you have typed the name of ANY item in
+        your response. It handles all generic manipulations of the items: 
+        put, look, drop, take
+        
+        It will NOT run if you did not include an item name in your response.
+        
+        Things to do: 
+        Ability to put things into the raft. 
+        DONE Make raft special: Can pick up only if you are not 
+        carrying anything else.
+        DONE Cannot pick up raft if anything is in it. 
+        """
+        if "put" in r:
+            self.put_items(r, t)
+        elif len(t) > 1:
+            print "You can only deal with one item at a time."
+        elif "look" in r:
+            print t[0].descrip, "\n"
+        elif "drop" in r:
+            self.drop_items(t)
+        elif "take" in r:
+            self.take_items(t)
+        else:
+            print "What do you want to do with the %s?" % t[0].name
+
+    def put_items(self, r, t):
+    # how to put items in the raft
+        print "Put is not working yet."
+
+    def drop_items(self, t):
+    # if item is in inventory, can drop
+        if t[0] in things.inventory:
+            things.inventory.remove(t[0])
+            self.items.append(t[0])
+            print "You drop the %s." % t[0].name
+            # check for raft
+            if t[0].name == "raft":
+                things.carrying_raft = False
+        else:
+            print "You are not carrying any %s." % t[0].name
+
+    def take_items(self, t):
+    # how to pick up things (the raft can only be carried alone)
+        if t[0] in things.inventory:
+            print "You are already carrying the %s." % t[0].name
+        elif not t[0] in self.items:
+            print "There is no %s here." % t[0].name
+        elif things.carrying_raft:
+            print "You can't carry anything else when you are carrying",
+            print "the raft."      
+        elif t[0].name == "raft" and not things.inventory:
+            self.move_item(t)
+            things.carrying_raft = True
+        elif len(things.inventory) < 4:
+            self.move_item(t)
+        else:
+            print "You cannot take the %s." % t[0].name
+            print "You are carrying too many things already."
+            print 'Type "inventory" or "i" to see what you\'ve got.\n'
+
+    def move_item(self, t):
+        things.inventory.append(t[0])
+        self.items.remove(t[0])
+        print "You are now carrying the %s." % t[0].name
 
 
 class Bongo_Glade(Location):
@@ -546,7 +574,8 @@ class South_River(Location):
     name = "\nRiver"
     descrip = """    This wide, unnamed river is deep and hazardous. The 
     far bank lies to the west of where you stand. This is one 
-    of the relatively few rivers in the world that flow north.\n"""
+    of the relatively few rivers in the world that flow north.
+    You are on the east bank.\n"""
 
     def travel(self, r):
         if "river" in r or ("north" in r or r == 'n'):

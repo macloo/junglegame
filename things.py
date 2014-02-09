@@ -1,8 +1,8 @@
 # all thing classes for game
 
 inventory = []
-
 raft_contents = []
+carrying_raft = False
 
 class Thing(object):
     """
@@ -12,6 +12,9 @@ class Thing(object):
     def __init__(self):
         self.carried = False
         self.in_raft = False
+
+        global inventory
+        global raft_contents
 
 
 class Raft(Thing):
