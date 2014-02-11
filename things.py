@@ -38,8 +38,8 @@ class Sample_Jar(Thing):
     name = "scientific collection jar"
     nickname = "jar"
     descrip = """A fancy clear plastic container with some kind of 
-electronics built into the base. The name of a bioengineering company 
-is printed on the top."""
+electronics built into the base. The name of a 
+bioengineering company is printed on the top."""
 
 
 class Beef_Jerky(Thing):
@@ -90,5 +90,15 @@ class Basket(Thing):
     nickname = name
     descrip = """A battered ancient traditional basket, wide and 
 shallow, woven from grass or reeds."""
+
+
+class Bongo_Fruit(Thing):
+    """
+    This is found in location 1.
+    """
+    name = "ripe bongo fruit"
+    nickname = "fruit"
+    descrip = """A pump, extremely ripe purple fruit -- heavy, 
+large, and exuding a delicious fragrance."""
 
 
