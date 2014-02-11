@@ -55,7 +55,7 @@ class Location(object):
             response = raw_input("> ")
             if self.items or things.inventory:
                 t = self.check_for_things(response)
-            if len(t) > 0:
+            if t: # if len(t) > 0
                 self.use_item(response, t)
             elif "look" in response:
                 print self.descrip
@@ -84,7 +84,9 @@ class Location(object):
             for item in things.raft_contents:
                 if item.nickname in r:
                     t.append(item)
-        return t
+            return t
+        else:
+            return t
 
     def list_items(self):
     # announce all items available in your current location
@@ -98,7 +100,7 @@ class Location(object):
         if raft in self.items and things.raft_contents:
             print "Inside the raft:"
             for item in things.raft_contents:
-                print "a", item.name
+                print "    a", item.name
             print
 
     def take_inventory(self):
@@ -129,20 +131,10 @@ class Location(object):
             print "What do you want to drop?"
 
     def use_item(self, r, t):
-        """
-        This function runs if you have typed the name of ANY item in
-        your response. It handles all generic manipulations of the items: 
-        put, look, drop, take
-        
-        It will NOT run if you did not include an item name in your response.
-        
-        Things to do: 
-        Ability to take things OUT of the raft. 
-        DONE Ability to put things into the raft. 
-        DONE Make raft special: Can pick up only if you are not 
-        carrying anything else.
-        DONE Cannot pick up raft if anything is in it. 
-        """
+    # This function runs if you have typed the name of ANY item in
+    # your response. It handles all generic manipulations of the items  
+    # in any location: put, look, drop, take
+    # It will NOT run if you did not include an item name in your response.
         if "put" in r:
             self.put_items(r, t)
         elif len(t) > 1:
@@ -158,12 +150,6 @@ class Location(object):
 
     def put_items(self, r, t):
     # how to put items in the raft
-        """
-        To do:
-        1. change take function so that can take things out of raft
-        2. make it so you cannot carry raft if anything is inside
-        There will need to be another part for putting fruit into jar.
-        """
         if len(t) == 1:
             # only 1 item in response with put
             print "What do you want to put the %s into?" % t[0].name
@@ -186,7 +172,8 @@ class Location(object):
                 first_item = t[1].name
                 second_item = t[0].name
             if second_item != "raft":
-                print "You can't put the %s into the %s." % (first_item, second_item)
+                print "You can't put the %s into the",
+                print "%s." % (first_item, second_item)
             else:
                 if things.carrying_raft:
                     print "You can't put anything in the raft while you",
@@ -205,7 +192,7 @@ class Location(object):
                         things.raft_contents.append(t[1])
 
     def drop_items(self, t):
-    # if item is in inventory, can drop
+    # if item is in inventory, can drop - drop_all() is separate function
         if t[0] in things.inventory:
             things.inventory.remove(t[0])
             self.items.append(t[0])
@@ -222,23 +209,32 @@ class Location(object):
             print "You are already carrying the %s." % t[0].name
         elif not t[0] in self.items:
             if raft in self.items:
-                if not t[0] in things.raft_contents:
-                    print "There is no %s here." % t[0].name
-                else:
-                    print "The thing is in the raft!" # test 
+                self.take_from_raft(t)
             else:
                 print "There is no %s here." % t[0].name
         elif t[0].name == "raft":
-            if len(things.inventory) > 0:
+            if things.inventory:
                 print "You can't pick up the raft when you are",
                 print "carrying other things."
-            elif len(things.raft_contents) > 0:
+            elif things.raft_contents:
                 print "You can't pick up the raft when things",
                 print "are in it."
             else:
                 things.carrying_raft = True
                 self.relocate_item(t)       
-        elif len(things.inventory) < 4:
+        else:
+            self.check_inventory(t)
+
+    def take_from_raft(self, t):
+    # take items out of raft
+        if not t[0] in things.raft_contents:
+            print "There is no %s here." % t[0].name
+        else:
+            self.check_inventory(t)
+
+    def check_inventory(self, t):
+    # are you carrying more than 4 items? or carrying the raft?
+        if len(things.inventory) < 4:
             if things.carrying_raft:
                 print "You can't carry anything else when you are carrying",
                 print "the raft."
@@ -250,6 +246,7 @@ class Location(object):
             print 'Type "inventory" or "i" to see what you\'ve got.\n'
 
     def relocate_item(self, t):
+    # remove item from a list and add it to your inventory list
         things.inventory.append(t[0])
         if t[0] in self.items:
             self.items.remove(t[0])
