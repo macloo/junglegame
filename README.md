@@ -15,7 +15,7 @@ You are a biologist who needs to find a rare fruit tree in the dangerous tropica
 
 At this point, most things do not run yet. However, you can step through a few locations, and nothing throws an error. 
 
-In location 27 (game starting point), you can pick up and drop items. Can't do much else with them yet.
+In location 27 (game starting point), you can pick up and drop several items. You can carry them to other locations and drop them there, and pick them up later. You can put items into the raft. Can't do much else yet.
 
 ## Game History
 
@@ -29,4 +29,4 @@ Feb. 8 - Added function use_item() to Location() class. Not finished yet, but it
 
 Feb. 9 - Lots of work on taking and dropping items, carrying them to different locations, and making the raft an item that can only be carried alone, not with other items. Lots of trial and error. Reorganized functions in main Location() class.
 
-Feb. 11 - More work on items. Now they can be put into the raft; the raft cannot be carried when things are inside it; the things can be seen if they are inside the raft. The put_items() was time-consuming.
+Feb. 11 - More work on items. Now they can be put into the raft; the raft cannot be carried when things are inside it; the things can be seen if they are inside the raft. The put_items() function was time-consuming.
