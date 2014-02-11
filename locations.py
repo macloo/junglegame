@@ -3,6 +3,19 @@
 
 import things
 
+# instantiate all items available in the game
+raft = things.Raft()
+machete = things.Machete()
+jar = things.Sample_Jar()
+jerky = things.Beef_Jerky()
+flash = things.Flashlight()
+rope = things.Rope()
+whistle = things.Whistle()
+compass = things.Compass()
+basket = things.Basket()
+fruit = things.Bongo_Fruit()
+
+
 class Location(object):
     """
     Parent class for all locations in the game. Location 00. Lots of 
@@ -14,6 +27,18 @@ class Location(object):
     def __init__(self):
         self.items = []
         self.first_visit = True
+        
+        # make all items available in all locations
+        global raft
+        global machete
+        global jar
+        global jerky
+        global flash
+        global rope
+        global whistle
+        global compass
+        global basket
+        global fruit
 
     def enter(self):
     # announce the current location when you enter it
@@ -35,6 +60,7 @@ class Location(object):
             elif "look" in response:
                 print self.descrip
                 self.list_items()
+                self.list_raft_contents()
             elif "inventory" in response or response == "i":
                 self.take_inventory()
             elif "drop" in response:
@@ -54,6 +80,10 @@ class Location(object):
         for item in things.inventory:
             if item.nickname in r:
                 t.append(item)
+        if raft in self.items and things.raft_contents:
+            for item in things.raft_contents:
+                if item.nickname in r:
+                    t.append(item)
         return t
 
     def list_items(self):
@@ -61,6 +91,14 @@ class Location(object):
         if self.items:
             for item in self.items:
                 print "    There is a %s here" % item.name
+            print
+
+    def list_raft_contents(self):
+    # announce all items inside the raft
+        if raft in self.items and things.raft_contents:
+            print "Inside the raft:"
+            for item in things.raft_contents:
+                print "a", item.name
             print
 
     def take_inventory(self):
@@ -78,10 +116,10 @@ class Location(object):
             print "Drop what? Give us a hint!"
         elif "all" in r or "everything" in r:
             if things.inventory:
-                for i in things.inventory:
-                    print "%s dropped" % i.name
-                    self.items.append(i)
-                    if i.name == "raft":
+                for item in things.inventory:
+                    print "%s dropped" % item.name
+                    self.items.append(item)
+                    if item.name == "raft":
                         things.carrying_raft = False
                 things.inventory = []
                 print
@@ -99,7 +137,8 @@ class Location(object):
         It will NOT run if you did not include an item name in your response.
         
         Things to do: 
-        Ability to put things into the raft. 
+        Ability to take things OUT of the raft. 
+        DONE Ability to put things into the raft. 
         DONE Make raft special: Can pick up only if you are not 
         carrying anything else.
         DONE Cannot pick up raft if anything is in it. 
@@ -119,7 +158,51 @@ class Location(object):
 
     def put_items(self, r, t):
     # how to put items in the raft
-        print "Put is not working yet."
+        """
+        To do:
+        1. change take function so that can take things out of raft
+        2. make it so you cannot carry raft if anything is inside
+        There will need to be another part for putting fruit into jar.
+        """
+        if len(t) == 1:
+            # only 1 item in response with put
+            print "What do you want to put the %s into?" % t[0].name
+        elif len(t) > 2:
+            # more than 2 items in response with put
+            print "That's too many things. Put them in one at a time."
+        else:
+            # find out the word order in response
+            # because the order of items will otherwise be random
+            words = r.split(' ')
+            for i in range(0, len(words)):
+                if t[0].nickname in words[i]:
+                    pos_a = i
+                elif t[1].nickname in words[i]:
+                    pos_b = i
+            if pos_a < pos_b:
+                first_item = t[0].name
+                second_item = t[1].name
+            else:
+                first_item = t[1].name
+                second_item = t[0].name
+            if second_item != "raft":
+                print "You can't put the %s into the %s." % (first_item, second_item)
+            else:
+                if things.carrying_raft:
+                    print "You can't put anything in the raft while you",
+                    print "are carrying it."
+                elif t[0].name != "raft" and not t[0] in things.inventory:
+                    print "You are not holding the %s." % t[0].name
+                elif t[1].name != "raft" and not t[1] in things.inventory:
+                    print "You are not holding the %s." % t[1].name
+                else:
+                    print "The %s is in the raft." % first_item
+                    if t[0].name == first_item:
+                        things.inventory.remove(t[0])
+                        things.raft_contents.append(t[0])
+                    else:
+                        things.inventory.remove(t[1])
+                        things.raft_contents.append(t[1])
 
     def drop_items(self, t):
     # if item is in inventory, can drop
@@ -138,29 +221,46 @@ class Location(object):
         if t[0] in things.inventory:
             print "You are already carrying the %s." % t[0].name
         elif not t[0] in self.items:
-            print "There is no %s here." % t[0].name
-        elif things.carrying_raft:
-            print "You can't carry anything else when you are carrying",
-            print "the raft."      
-        elif t[0].name == "raft" and not things.inventory:
-            self.move_item(t)
-            things.carrying_raft = True
+            if raft in self.items:
+                if not t[0] in things.raft_contents:
+                    print "There is no %s here." % t[0].name
+                else:
+                    print "The thing is in the raft!" # test 
+            else:
+                print "There is no %s here." % t[0].name
+        elif t[0].name == "raft":
+            if len(things.inventory) > 0:
+                print "You can't pick up the raft when you are",
+                print "carrying other things."
+            elif len(things.raft_contents) > 0:
+                print "You can't pick up the raft when things",
+                print "are in it."
+            else:
+                things.carrying_raft = True
+                self.relocate_item(t)       
         elif len(things.inventory) < 4:
-            self.move_item(t)
+            if things.carrying_raft:
+                print "You can't carry anything else when you are carrying",
+                print "the raft."
+            else:
+                self.relocate_item(t)
         else:
             print "You cannot take the %s." % t[0].name
             print "You are carrying too many things already."
             print 'Type "inventory" or "i" to see what you\'ve got.\n'
 
-    def move_item(self, t):
+    def relocate_item(self, t):
         things.inventory.append(t[0])
-        self.items.remove(t[0])
+        if t[0] in self.items:
+            self.items.remove(t[0])
+        elif t[0] in things.raft_contents:
+            things.raft_contents.remove(t[0])
         print "You are now carrying the %s." % t[0].name
 
 
 class Bongo_Glade(Location):
     """
-    Location 01.
+    Location 01. Fruit, in tree, is here.
     """
 
     name = "\nGlade of the Bongo Fruit Tree"
@@ -256,8 +356,8 @@ class Path5(Location):
     """
 
     def __init__(self):
-        self.basket = things.Basket()
-        self.items = [self.basket.name]
+        self.first_visit = True
+        self.items = [basket]
 
     name = "\nPath"
     descrip = """    The path ends here, choked off by dense foliage
@@ -598,17 +698,8 @@ class Vehicle_Clearing(Location):
     def __init__(self):
         self.first_visit = True
         
-        self.raft = things.Raft()
-        self.machete = things.Machete()
-        self.jar = things.Sample_Jar()
-        self.jerky = things.Beef_Jerky()
-        self.flash = things.Flashlight()
-        self.rope = things.Rope()
-        self.whistle = things.Whistle()
-        self.compass = things.Compass()
-        
-        self.items = [self.raft, self.machete, self.jar, self.jerky, 
-                self.flash, self.rope, self.whistle, self.compass]
+        self.items = [raft, machete, jar, jerky, flash, rope, whistle, 
+                   compass]
 
     name = "\nClearing"
     descrip = """    Your vehicle, a powerful but compact 4WD, is parked in
