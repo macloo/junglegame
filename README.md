@@ -13,7 +13,7 @@ You are a biologist who needs to find a rare fruit tree in the dangerous tropica
 
 ## Current Status
 
-At this point, most things do not run yet. However, you can step through a few locations, and nothing throws an error. 
+At this point, most things do not run yet. However, you can step through all of the locations, and nothing throws an error. 
 
 In location 27 (game starting point), you can pick up and drop several items. You can carry them to other locations and drop them there, and pick them up later. You can put items into the raft. Can't do much else yet.
 
