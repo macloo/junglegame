@@ -1,6 +1,8 @@
 # all location classes for game
 # dictionary at bottom 
 
+from sys import exit
+
 import things
 
 # instantiate all items available in the game
@@ -67,6 +69,8 @@ class Location(object):
                 self.drop_all(response)
             elif "take" in response:
                 print "What do you want to take?"
+            elif response == "exit":
+                self.exit_game()
             else:
                 return self.travel(response)
                 # this is particular to each location
@@ -254,6 +258,11 @@ class Location(object):
             things.raft_contents.remove(t[0])
         print "You are now carrying the %s." % t[0].name
 
+    def exit_game(self):
+        a = raw_input("Do you want to quit the game? y/n ")
+        if a == "y":
+            exit()
+
 
 class Bongo_Glade(Location):
     """
@@ -267,15 +276,17 @@ class Bongo_Glade(Location):
     weight of large, round, shining purple fruits. There 
     is a break in the dense forest to the south.\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "south" in response or response == 's':
-                return '07'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You can't go that way."
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return '07'
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        else:
+            return None
 
 
 class Path2(Location):
@@ -287,17 +298,17 @@ class Path2(Location):
     descrip = """    The remains of a cleared path run east and south. To 
     the east is a kind of bridge.\n"""   
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "east" in response or response == 'e':
-                return '03'
-            elif "south" in response or response == 's':
-                return '08'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You can't go that way."
+        elif "east" in r or r == 'e':
+            return '03'
+        elif "south" in r or r == 's':
+            return '08'
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        else:
+            return None
 
 
 class North_Bridge(Location):
@@ -310,17 +321,17 @@ class North_Bridge(Location):
     woven rattan spans the river. Standing on this bridge is
     surely a great risk!\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "east" in response or response == 'e':
-                return '04'
-            elif "west" in response or response == 'w':
-                return '02'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You can't go that way."
+        elif "east" in r or r == 'e':
+            return '04'
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return '02'
+        else:
+            return None
 
 
 class Path4(Location):
@@ -332,19 +343,17 @@ class Path4(Location):
     descrip = """    Here a barely perceptible old path leads to the 
     south and east. A kind of bridge can be seen to the west.\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "east" in response or response == 'e':
-                return '05'
-            elif "west" in response or response == 'w':
-                return '03'
-            elif "south" in response or response == 's':
-                return '09'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You can't go that way."
+        elif "east" in r or r == 'e':
+            return '05'
+        elif "south" in r or r == 's':
+            return '09'
+        elif "west" in r or r == 'w':
+            return '03'
+        else:
+            return None
 
 
 class Path5(Location):
@@ -363,15 +372,17 @@ class Path5(Location):
     descrip2 = """    The path ends here, choked off by dense foliage
     and thick, twisted vines.\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "west" in response or response == 'w':
-                return '04'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You can't go that way."
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return '04'
+        else:
+            return None
 
 
 class Dense_Forest6(Location):
@@ -383,15 +394,17 @@ class Dense_Forest6(Location):
     descrip = """    The forest growth is impossibly thick here. You can
     only return the way you came.\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "east" in response or response == 'e':
-                return '07'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You can't go that way."
+        elif "east" in r or r == 'e':
+            return '07'
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        else:
+            return None
 
 
 class Dense_Forest7(Location):
@@ -403,21 +416,19 @@ class Dense_Forest7(Location):
     descrip = """    The tangled undergrowth here might yield to a sharp
     blade. At present, you can't go anywhere but east.\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "east" in response or response == 'e':
-                return '08'
-            elif "north" in response or response == 'n':
-                return '01'
-            elif "west" in response or response == 'w':
-                return '06'
-            elif "southwest" in response or response == 'sw':
-                return '11'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '01'
+        elif "east" in r or r == 'e':
+            return '08'
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return '06'
+        elif "southwest" in r or r == 'sw':
+            return '11'
+        else:
+            return None
 
 
 class Slope(Location):
@@ -429,17 +440,17 @@ class Slope(Location):
     descrip = """    The ground here makes a hump, going up toward the west.
     You could move sideways on the slope toward the north.\n"""
 
-    def action(self):
-        while True:
-            response = raw_input("> ")
-            if "look" in response:
-                print self.descrip
-            elif "west" in response or response == 'w':
-                return '07'
-            elif "north" in response or response == 'n':
-                return '02'
-            else:
-                print "I don't understand that."
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '02'
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return '07'
+        else:
+            return None
 
 
 class Dense_Forest9(Location):
@@ -451,8 +462,19 @@ class Dense_Forest9(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '04'
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        elif "southeast" in r or r == 'se':
+            return '14'
+        else:
+            return None
 
 
 class Falls(Location):
@@ -460,25 +482,38 @@ class Falls(Location):
     Location 10.
     """
 
-    name = "Falls"
-    descrip = """    The   
-    There is """
+    name = "\nFalls"
+    descrip = """    You are swept over the edge of the falls!   
+    It's a long
+               long
+                   long
+                       way
+                          down ..."""
 
     def action(self):
-        pass
+        exit()
 
 
 class Panther_Forest(Location):
     """
-    Location 11.
+    Location 11. Here you must survive the panther.
     """
 
     name = "Forest"
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '07'
+        elif "east" in r or r == 'e':
+            return '12'
+        elif "south" in r or r == 's':
+            return '15'
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        else:
+            return None
 
 
 class Dense_Forest12(Location):
@@ -490,8 +525,17 @@ class Dense_Forest12(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You can't go that way."
+        elif "east" in r or r == 'e':
+            return "The river is there."
+        elif "south" in r or r == 's':
+            return '16'
+        elif "west" in r or r == 'w':
+            return '11'
+        else:
+            return None
 
 
 class North_River(Location):
@@ -499,12 +543,21 @@ class North_River(Location):
     Location 13.
     """
 
-    name = "River"
-    descrip = """    The   
-    There is """
+    name = "\nRiver"
+    descrip = """    The water gets rougher and faster. You see a possible 
+    landing place to the right and a high bank to the left.\n"""
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '10'
+        elif right in r or ("east" in r or r == 'e'):
+            return '14'
+        elif "south" in r or r == 's':
+            return '10'
+        elif "left" in r or ("west" in r or r == 'w'):
+            return '10'
+        else:
+            return None
 
 
 class Clearing14(Location):
@@ -512,12 +565,25 @@ class Clearing14(Location):
     Location 14.
     """
 
-    name = "Clearing"
-    descrip = """    The   
-    There is """
+    name = "\nClearing"
+    descrip = """    A sandy, flat space makes a safe landing area
+    beside the rushing river. A narrow track cuts north and west.\n"""
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "There's no passage that way."
+        elif "east" in r or r == 'e':
+            return "Dense jungle blocks that side of the clearing."
+        elif "south" in r or r == 's':
+            return "Dense jungle blocks that side of the clearing."
+        elif "west" in r or r == 'w':
+            a = "If you went into the river here, you would be swept \n"
+            b = "over the falls to your doom."
+            return a + b
+        if "northwest" in r or r == 'nw':
+            return '09'
+        else:
+            return None
 
 
 class Dense_Forest15(Location):
@@ -529,8 +595,17 @@ class Dense_Forest15(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '11'
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return '17'
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        else:
+            return None
 
 
 class Path16(Location):
@@ -542,8 +617,17 @@ class Path16(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '12'
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return '18'
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        else:
+            return None
 
 
 class Dense_Forest17(Location):
@@ -555,8 +639,17 @@ class Dense_Forest17(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '15'
+        elif "east" in r or r == 'e':
+            return '18'
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        else:
+            return None
 
 
 class Path18(Location):
@@ -568,8 +661,17 @@ class Path18(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '16'
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return '21'
+        elif "west" in r or r == 'w':
+            return '17'
+        else:
+            return None
 
 
 class Log_Forest(Location):
@@ -581,8 +683,19 @@ class Log_Forest(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You can't go that way."
+        elif "east" in r or r == 'e':
+            return '20'
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        elif "southeast" in r or r == 'se':
+            return '24'
+        else:
+            return None
 
 
 class Clearing20(Location):
@@ -594,8 +707,17 @@ class Clearing20(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "You can't go that way."
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return '22'
+        elif "west" in r or r == 'w':
+            return '19'
+        else:
+            return None
 
 
 class Viper_Forest(Location):
@@ -607,21 +729,39 @@ class Viper_Forest(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '18'
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return '23'
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        else:
+            return None
 
 
 class Swamp(Location):
     """
-    Location 22.
+    Location 22. This is hard to cross.
     """
 
     name = "Swamp"
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '20'
+        elif "east" in r or r == 'e':
+            return '23'
+        elif "south" in r or r == 's':
+            return '24'
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        else:
+            return None
 
 
 class Path23(Location):
@@ -633,8 +773,17 @@ class Path23(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '21'
+        elif "east" in r or r == 'e':
+            return "You can't go that way."
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return '22'
+        else:
+            return None
 
 
 class Clearing24(Location):
@@ -646,21 +795,78 @@ class Clearing24(Location):
     descrip = """    The   
     There is """
 
-    def action(self):
-        pass
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return '22'
+        elif "east" in r or r == 'e':
+            return '25'
+        elif "south" in r or r == 's':
+            return "You can't go that way."
+        elif "west" in r or r == 'w':
+            return "You can't go that way."
+        elif "northwest" in r or r == 'nw':
+            return '19'
+        else:
+            return None
 
 
 class Dense_Forest25(Location):
     """
-    Location 25.
+    Location 25. Here you must hack through with the machete.
     """
 
-    name = "Dense Forest"
-    descrip = """    The   
-    There is """
+    name = "\nDense Forest"
+    descrip = """    There is an opening to the west here, but in all
+    other directions, the thick jungle blocks your way.\n"""
+    descrip2 = """    A narrow path has been hacked through the dense
+    undergrowth here, leading south. There is an opening 
+    to the west. \n"""
 
-    def action(self):
-        pass
+    def __init__(self):
+        self.items = [] 
+        self.first_visit = True
+        self.blocked = True
+
+    def use_item(self, r, t):
+    # we have a special version of this function in this location 
+    # because the machete can be used here
+        if "put" in r:
+            self.put_items(r, t)
+        elif len(t) > 1:
+            print "You can only deal with one item at a time."
+        elif "look" in r:
+            print t[0].descrip, "\n"
+        elif "drop" in r:
+            self.drop_items(t)
+        elif "take" in r:
+            self.take_items(t)
+        elif t[0].name == "machete":
+            verbs = ["cut", "hack", "slash", "slice", "chop"]
+            for verb in verbs:
+                if verb in r:
+                    print "You %s through the thick foliage with the" % verb
+                    print "machete and open a new path to the south."
+                    self.blocked = False
+                    self.descrip = self.descrip2
+                    break
+        else:
+            print "What do you want to do with the %s?" % t[0].name
+
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            return "The forest is too thick. That way is impassable."
+        elif "east" in r or r == 'e':
+            return "You cannot enter the river here."
+        elif "south" in r or r == 's':
+            if self.blocked:
+                a = "If only you had some way to cut through the dense jungle!"
+                return a
+            else:
+                return '29'
+        elif "west" in r or r == 'w':
+            return '24'
+        else:
+            return None
 
 
 class South_River(Location):
@@ -682,7 +888,8 @@ class South_River(Location):
         elif "south" in r or r == 's':
             return "You cannot go upriver. The current is too swift."
         elif "west" in r or r == 'w':
-            return "It is impossible to cross to the west bank of the river here."
+            a = "It is impossible to cross to the west bank of the river here."
+            return a
         else:
             return None
 
@@ -736,23 +943,81 @@ class Dirt_Road(Location):
         elif "south" in r or r == 's':
             return '27'
         elif "west" in r or r == 'w':
-            return ("You can hear the river, but the forest growth is too thick. \nIt's impossible to break through in that direction.")
+            a = "You can hear the river, but the forest growth is too thick.\n"
+            b = "It's impossible to break through in that direction."
+            return a + b
         else:
             return None
 
 
 class Dense_Forest29(Location):
     """
-    Location 29.
+    Location 29. Here you must hack your way through with the machete.
     """
 
-    name = ""
-    descrip = """    The   
-    There is """
+    def __init__(self):
+        self.items = [] 
+        self.first_visit = True
+        self.blocked = True
 
-    def action(self):
-        pass
+    name = "\nDense Forest"
+    descrip = """    The forest floor is choked with twisted undergrowth,
+    and tall thorny plants bar the way between the trees. 
+    A bridge lies to the east. \n"""
+    descrip2 = """    A narrow path has been hacked through the thorny
+    undergrowth here. A bridge lies to the east. \n"""
 
+    def use_item(self, r, t):
+    # we have a special version of this function in this location 
+    # because the machete can be used here
+        if "put" in r:
+            self.put_items(r, t)
+        elif len(t) > 1:
+            print "You can only deal with one item at a time."
+        elif "look" in r:
+            print t[0].descrip, "\n"
+        elif "drop" in r:
+            self.drop_items(t)
+        elif "take" in r:
+            self.take_items(t)
+        elif t[0].name == "machete":
+            verbs = ["cut", "hack", "slash", "slice", "chop"]
+            for verb in verbs:
+                if verb in r:
+                    print "You %s through the tough branches with the" % verb
+                    print "machete and clear a pathway to the north."
+                    self.blocked = False
+                    self.descrip = self.descrip2
+                    break
+        else:
+            print "What do you want to do with the %s?" % t[0].name
+
+    def travel(self, r):
+        if "north" in r or r == 'n':
+            if self.blocked:
+                a = "If only you had some way to cut through the thorny "
+                b = "branches!"
+                return a + b
+            else:
+                return '25'
+        elif "east" in r or r == 'e':
+            if len(things.inventory) > 1:
+                a = "It's impossible to cross the bridge when you are "
+                b = "carrying \nso many things."
+                return a + b
+            elif raft in things.inventory:
+                a = "You can't cross the bridge while you are carrying \n"
+                b = "that big raft!"
+                return a + b
+            else:
+                return '30'
+        elif "south" in r or r == 's':
+            return "There is no way through in that direction."
+        elif "west" in r or r == 'w':
+            return "It is impossible to go in that direction."
+        else:
+            return None
+ 
 
 class South_Bridge(Location):
     """
@@ -774,7 +1039,19 @@ class South_Bridge(Location):
         elif "south" in r or r == 's':
             return "If you went that way, you would be in the river."
         elif "west" in r or r == 'w':
-            return "You can't go that way yet."
+            if len(things.inventory) > 1:
+                a = "It's impossible to cross the bridge when you are "
+                b = "carrying \nso many things."
+                return a + b
+            elif raft in things.inventory:
+                a = "You can't cross the bridge while you are carrying "
+                b = "that big raft!"
+                return a + b
+            else:
+                print "Holding very tightly to the rope that stretches across"
+                print "the swift river, you manage to walk across the slippery"
+                print "narrow log to the opposite side."
+                return '29'
         else:
             return None
 
