@@ -358,7 +358,7 @@ class Path4(Location):
 
 class Path5(Location):
     """
-    Location 05.
+    Location 05. Dead end.
     """
 
     def __init__(self):
@@ -387,7 +387,7 @@ class Path5(Location):
 
 class Dense_Forest6(Location):
     """
-    Location 06.
+    Location 06. Dead end.
     """
 
     name = "\nDense Forest"
@@ -409,7 +409,7 @@ class Dense_Forest6(Location):
 
 class Dense_Forest7(Location):
     """
-    Location 07.
+    Location 07. Here you must hack through with the machete.
     """
 
     name = "\nDense Forest"
@@ -479,7 +479,7 @@ class Dense_Forest9(Location):
 
 class Falls(Location):
     """
-    Location 10.
+    Location 10. Here you die.
     """
 
     name = "\nFalls"
@@ -540,7 +540,7 @@ class Dense_Forest12(Location):
 
 class North_River(Location):
     """
-    Location 13.
+    Location 13. Here you must land the raft.
     """
 
     name = "\nRiver"
@@ -550,7 +550,7 @@ class North_River(Location):
     def travel(self, r):
         if "north" in r or r == 'n':
             return '10'
-        elif right in r or ("east" in r or r == 'e'):
+        elif "right" in r or ("east" in r or r == 'e'):
             return '14'
         elif "south" in r or r == 's':
             return '10'
@@ -562,7 +562,7 @@ class North_River(Location):
 
 class Clearing14(Location):
     """
-    Location 14.
+    Location 14. Here is where the raft lands.
     """
 
     name = "\nClearing"
@@ -676,7 +676,7 @@ class Path18(Location):
 
 class Log_Forest(Location):
     """
-    Location 19.
+    Location 19. Here you can pick up a log.
     """
 
     name = "Forest"
@@ -722,7 +722,7 @@ class Clearing20(Location):
 
 class Viper_Forest(Location):
     """
-    Location 21.
+    Location 21. Here you must survive the pit viper.
     """
 
     name = "Forest"
@@ -744,7 +744,7 @@ class Viper_Forest(Location):
 
 class Swamp(Location):
     """
-    Location 22. This is hard to cross.
+    Location 22. This swamp is hard to cross.
     """
 
     name = "Swamp"
@@ -871,7 +871,7 @@ class Dense_Forest25(Location):
 
 class South_River(Location):
     """
-    Location 26.
+    Location 26. Here you can launch the raft.
     """
 
     name = "\nRiver"
@@ -926,7 +926,7 @@ class Vehicle_Clearing(Location):
 
 class Dirt_Road(Location):
     """
-    Location 28.
+    Location 28. Dead end.
     """
 
     name = "\nDirt Road"
