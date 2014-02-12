@@ -33,7 +33,7 @@ Feb. 7 - Created skeleton classes for all game items. These are things that can 
 
 Feb. 8 - Added function use_item() to Location() class. Not finished yet, but it allows the player to pick up, drop, and examine items that are found in the game. Also worked out a new function -- defaults() -- for handling directional movement from one location to another. That required a rewrite of the Engine() class.
 
-Feb. 9 - Lots of work on taking and dropping items, carrying them to different locations, and making the raft an item that can only be carried alone, not with other items. Lots of trial and error. Reorganized functions in main Location() class.
+Feb. 9 - Lots of work on taking and dropping items, carrying them to different locations, and making the raft an item that can only be carried alone, not with other items. Lots of trial and error. Reorganized functions in main Location() class. Changed defaults() to travel() -- this function, unique to each location, handles moving you out to an adjacent location. 
 
 Feb. 11 - More work on items. Now they can be put into the raft; the raft cannot be carried when things are inside it; the things can be seen if they are inside the raft. The put_items() function was time-consuming.
 
