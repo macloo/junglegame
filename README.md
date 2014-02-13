@@ -7,7 +7,9 @@ This exercise is supposed to teach us (beginners) more about object-oriented pro
 
 In ex. 43, everything was coded in a single .py file. Now, in ex. 45, we are tasked with using multiple files (modules).
 
-This has been a GREAT learning exercise for working with objects. I had never understood OOP until three weeks ago. Now I understand a lot more. Granted, this is only a simple game, but in working with variables, lists, and functions in this game, I've learned a ton about how to traverse the classes in my code.
+This has been a GREAT learning exercise for working with objects. I had never understood OOP until three weeks ago. Now I understand a lot more. (Probably I am still doing many things wrong.)
+
+Granted, this is only a simple game, but in working with variables, lists, and functions in this game, I've learned a ton about how to traverse the classes in my code.
 
 ## The Game
 
