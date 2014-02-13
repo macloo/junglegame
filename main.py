@@ -18,7 +18,7 @@ class Engine(object):
                 current_loc.enter()
             elif next_loc == None:
                 print "I didn't understand that."
-                exit() # remove later when all locations have action()
+                # exit() 
             elif len(next_loc) > 2:
                 print next_loc 
             else:
