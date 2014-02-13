@@ -10,8 +10,6 @@ class Thing(object):
     """
 
     def __init__(self):
-        self.carried = False
-        self.in_raft = False
 
         global inventory
         global raft_contents
