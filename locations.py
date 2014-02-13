@@ -21,7 +21,7 @@ fruit = things.Bongo_Fruit()
 class Location(object):
     """
     Parent class for all locations in the game. Location 00. Lots of 
-    functions here because they are available in all locations.
+    functions here because they are available in ALL locations.
     - action() is the crucial function
     - response (variable) stores the interaction from the player
     """
@@ -29,6 +29,8 @@ class Location(object):
     def __init__(self):
         self.items = []
         self.first_visit = True
+        self.raft_launched = False
+        self.arrived_from_river = False
         
         # make all items available in all locations
         global raft
@@ -55,7 +57,11 @@ class Location(object):
         t = []
         while True:
             response = raw_input("> ")
-            if self.items or things.inventory:
+            # this is a special one-time event -
+            if self.raft_launched:
+                return '13'
+            # this finds out what items are available -
+            elif self.items or things.inventory:
                 t = self.check_for_things(response)
             if t: # if len(t) > 0
                 self.use_item(response, t)
@@ -364,6 +370,8 @@ class Path5(Location):
     def __init__(self):
         self.first_visit = True
         self.items = [basket]
+        self.raft_launched = False
+        self.arrived_from_river = False
 
     name = "\nPath"
     descrip = """    The path ends here, choked off by dense foliage
@@ -483,12 +491,13 @@ class Falls(Location):
     """
 
     name = "\nFalls"
-    descrip = """    You are swept over the edge of the falls!   
+    descrip = """    You are swept over the edge of the falls!\n 
     It's a long
                long
                    long
-                       way
-                          down ..."""
+                        way
+                        down ...\n
+    Goodbye!\n"""
 
     def action(self):
         exit()
@@ -543,21 +552,44 @@ class North_River(Location):
     Location 13. Here you must land the raft.
     """
 
+    def __init__(self):
+        self.first_visit = True
+        self.raft_launched = False
+        self.arrived_from_river = False
+        
+        # the raft must be here, or else YOU would not be here 
+        self.items = [raft] 
+
     name = "\nRiver"
     descrip = """    The water gets rougher and faster. You see a possible 
-    landing place to the right and a high bank to the left.\n"""
+    landing place to the right and a high bank to the left.
+    Realizing that you do not have a paddle, you consider 
+    that maybe by leaning hard and pulling on the front side 
+    of the raft, you might be able to steer it. \n"""
+
+    def use_item(self, r, t):
+    # special version of this function because you are in a dire situation!
+        if len(t) > 1:
+            print "You can only deal with one item at a time."
+        elif "look" in r:
+            print t[0].descrip, "\n"
+        elif t[0].name == "raft":
+            print "Where do you want to steer the raft?"
+        elif "drop" in r:
+            print "If you drop the %s now, it will be gone forever!" % t[0].name 
+        else:
+            print "This is no time to be fooling around with the",
+            print "%s!" % t[0].name
 
     def travel(self, r):
-        if "north" in r or r == 'n':
-            return '10'
-        elif "right" in r or ("east" in r or r == 'e'):
+        if "right" in r or ("east" in r or r == 'e'):
+            # take raft with you to the landing site - 
+            self.items.remove(raft)
+            things.inventory.append(raft)
+            self.arrived_from_river = True
             return '14'
-        elif "south" in r or r == 's':
-            return '10'
-        elif "left" in r or ("west" in r or r == 'w'):
-            return '10'
         else:
-            return None
+            return '10'
 
 
 class Clearing14(Location):
@@ -565,9 +597,27 @@ class Clearing14(Location):
     Location 14. Here is where the raft lands.
     """
 
+    def __init__(self):
+        self.first_visit = True
+        self.raft_launched = False
+        self.arrived_from_river = True
+        self.items = []
+        
     name = "\nClearing"
     descrip = """    A sandy, flat space makes a safe landing area
     beside the rushing river. A narrow track cuts north and west.\n"""
+
+    def enter(self):
+    # special version of this for this location
+        print self.name
+        if self.arrived_from_river:
+            things.inventory.remove(raft)
+            self.items.append(raft)
+            self.arrived_from_river = False
+        if self.first_visit:
+            print self.descrip
+            self.first_visit = False
+        self.list_items()
 
     def travel(self, r):
         if "north" in r or r == 'n':
@@ -826,6 +876,7 @@ class Dense_Forest25(Location):
         self.items = [] 
         self.first_visit = True
         self.blocked = True
+        self.raft_launched = False
 
     def use_item(self, r, t):
     # we have a special version of this function in this location 
@@ -880,6 +931,40 @@ class South_River(Location):
     of the relatively few rivers in the world that flow north.
     You are on the east bank.\n"""
 
+    def use_item(self, r, t):
+    # we have a special version of this function in this location 
+    # because the raft can be launched into the river here
+        if "put" in r:
+            self.put_items(r, t)
+        elif len(t) > 1:
+            print "You can only deal with one item at a time."
+        elif "look" in r:
+            print t[0].descrip, "\n"
+        elif "drop" in r:
+            self.drop_items(t)
+        elif "take" in r:
+            self.take_items(t)
+        elif t[0].name == "raft":
+            verbs = ["drag", "float", "launch", "pull", "push"]
+            
+            a = "You manage to drag the raft into the river, keeping it from \n"
+            a += "floating away until you carefully step into it, crouch "
+            a += "down, \n"
+            a += "and sit steadily in the center. By leaning forward with a \n"
+            a += "small lurch, you launch the raft into the current!\n"
+
+            for verb in verbs:
+                if (verb in r) and (raft in self.items):
+                    print a
+                    self.raft_launched = True
+                    self.items.remove(raft)
+                    break
+                elif (verb in r) and (raft in things.inventory):
+                    print "The raft should be on the ground to do that."
+                    break
+        else:
+            print "What do you want to do with the %s?" % t[0].name
+
     def travel(self, r):
         if "river" in r or ("north" in r or r == 'n'):
             return "You can only go downriver if you use the raft."
@@ -901,6 +986,7 @@ class Vehicle_Clearing(Location):
 
     def __init__(self):
         self.first_visit = True
+        self.raft_launched = False
         
         self.items = [raft, machete, jar, jerky, flash, rope, whistle, 
                    compass]
@@ -959,6 +1045,7 @@ class Dense_Forest29(Location):
         self.items = [] 
         self.first_visit = True
         self.blocked = True
+        self.raft_launched = False
 
     name = "\nDense Forest"
     descrip = """    The forest floor is choked with twisted undergrowth,
