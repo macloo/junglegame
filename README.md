@@ -15,12 +15,18 @@ You are a biologist who needs to find a rare fruit tree in the dangerous tropica
 
 ## Current Status
 
-At this point, most "adventures" do not run yet. However, you can step through all of the locations, and nothing throws an error. 
+At this point, most "adventures" do not run yet. However, you can: 
 
-In location 27 (game starting point), you can pick up and drop several items. You can carry them to other locations and drop them there, and pick them up later. You can put items into the raft. Can't do much else yet.
+* Visit all 31 locations, and nothing throws an error.
+* Ride the raft down the river.
+* Pick up and drop any item.
+* Carry items to other locations, drop them there, and pick them up later.
+* Put items into the raft and take them out again.
 
-* To run the game: main.py
+Gameplay:
 
+* To run the game: python main.py
+* Moving from place to place: n, e, s, and w work in most locations. Sometimes you can use other words too, as suggested by the location description. 
 * You can quit cleanly by typing: exit
 
 ## Game History
@@ -38,4 +44,6 @@ Feb. 9 - Lots of work on taking and dropping items, carrying them to different l
 Feb. 11 - More work on items. Now they can be put into the raft; the raft cannot be carried when things are inside it; the things can be seen if they are inside the raft. The put_items() function was time-consuming.
 
 Feb. 12 - Zed says spend a week on this. My week is up. However, before I return to Zed's exercise 45, I want to get the raft into the water. I've got walkthrough capability for all scenes (some do not have descriptions written) and all objects can be picked up, carried, dropped, or put into the raft. Items can be taken out of the raft. The machete can be used in two locations.
+
+Feb. 13 - The raft works now. You can launch it, with or without items inside it. You travel downriver automatically, entering a new location no matter what you do. Then you either die or land safely, depending on your response. The raft lands with you, with all items inside (if they were inside when you launched the raft). Learned more about passing objects into other objects. Possibly inefficient solution to moving the raft downriver.
 
