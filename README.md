@@ -1,9 +1,9 @@
 Jungle Game (Python 2.7)
 ========================
 
-A simple text-only Python game based on exercise 45 in Zed Shaw's free online book [Learn Python the Hard Way](http://learnpythonthehardway.org/book/).
+A simple text-only Python game based on [exercise 45](http://learnpythonthehardway.org/book/ex45.html) in Zed Shaw's free online book [Learn Python the Hard Way](http://learnpythonthehardway.org/book/).
 
-This exercise is supposed to teach us (beginners) more about object-oriented programming concepts. In a previous exercise (43), we started building a game with skeleton classes provided by Zed. This time, we start from scratch and design our own text game (like [Zork](http://en.wikipedia.org/wiki/Zork) or [Adventure](http://en.wikipedia.org/wiki/Colossal_Cave_Adventure)). 
+This exercise is supposed to teach us (beginners) more about object-oriented programming concepts. In a previous exercise (43), we started building [a game](https://github.com/macloo/pythongame) with skeleton classes provided by Zed. This time, we start from scratch and design our own text game (like [Zork](http://en.wikipedia.org/wiki/Zork) or [Adventure](http://en.wikipedia.org/wiki/Colossal_Cave_Adventure)). 
 
 In ex. 43, everything was coded in a single .py file. Now, in ex. 45, we are tasked with using multiple files (modules).
 
