@@ -1,102 +1,67 @@
-# all thing classes for game
+# all things/items in the jungle game
 
-inventory = []
-raft_contents = []
-carrying_raft = False
 
 class Thing(object):
     """
-    Parent class for all things in the game.
+    Parent class for all things/items in the game.
     """
 
-    def __init__(self):
-
-        global inventory
-        global raft_contents
-
-
-class Raft(Thing):
-
-    name = "raft"
-    nickname = name
-    descrip = """A heavy-duty inflatable boat, fully inflated, and 
-large enough to carry two people safely."""
+    def __init__(self, name, nick, description):
+        self.name = name
+        self.nickname = nick
+        self.descrip = description
 
 
-class Machete(Thing):
+d1 = """A heavy-duty inflatable boat, fully inflated, and large
+enough to carry two people safely."""
+raft = Thing("raft", "raft", d1)
 
-    name = "machete"
-    nickname = name
-    descrip = """A long, broad, sharp blade with a wooden handle, 
-about 14 inches long."""
+d2 = """A long, broad, sharp blade with a wooden handle, about
+14 inches long."""
+machete = Thing("machete", "machete", d2)
+ 
+d3 = """A fancy clear-plastic container with some kind of electronics
+built into the base. The name of a bioengineering company is
+printed on the top."""
+jar = Thing("scientific collection jar", "jar", d3)
 
+d4 = """A plastic packet of good-quality dried meat for keeping
+your energy levels up."""
+jerky = Thing("packet of beef jerky", "jerky", d4)
 
-class Sample_Jar(Thing):
-
-    name = "scientific collection jar"
-    nickname = "jar"
-    descrip = """A fancy clear plastic container with some kind of 
-electronics built into the base. The name of a 
-bioengineering company is printed on the top."""
-
-
-class Beef_Jerky(Thing):
-
-    name = "packet of beef jerky"
-    nickname = "jerky"
-    descrip = """A plastic packet of good-quality dried meat for 
-keeping your energy levels up."""
-
-
-class Flashlight(Thing):
-
-    name = "flashlight"
-    nickname = "flash"
-    descrip = """A long metal torch, packed with heavy D batteries. 
+d5 = """A long metal torch, packed with heavy D batteries.
 It weighs a lot."""
+flash = Thing("flashlight", "flash", d5)
 
+d6 = """A large coil of nylon rope, suitable for rock climbing."""
+rope = Thing("rope", "rope", d6)
 
-class Rope(Thing):
+d7 = """A sturdy plastic model from a trekking outfitter, this
+will emit a piercing loud sound."""
+whistle = Thing("whistle", "whistle", d7)
 
-    name = "rope"
-    nickname = name
-    descrip = """A large coil of nylon rope, suitable for rock 
-climbing."""
+d8 = """A large, old-style analog device, with a glass face and
+a perky needle that always points north."""
+compass = Thing("compass", "compass", d8)
 
+d9 = """A battered ancient traditional basket, wide and shallow,
+woven from grass or reeds."""
+basket = Thing("basket", "basket", d9)
+ 
+d10 = """A pump, extremely ripe purple fruit; it is heavy, large,
+and exudes a delicious fragrance."""
+fruit = Thing("ripe bongo fruit", "fruit", d10)
 
-class Whistle(Thing):
+things = [raft, machete, jar, jerky, flash, rope, whistle, compass,
+       basket, fruit]
 
-    name = "whistle"
-    nickname = name
-    descrip = """A sturdy plastic model from a trekking outfitter, 
-this will emit a piercing loud sound."""
+# for testing this file
+def main(t):
+    for thing in things:
+        print thing.name
+        print thing.nickname
+        print thing.descrip
+        print
 
-
-class Compass(Thing):
-
-    name = "compass"
-    nickname = name
-    descrip = """A large, old-style analog device, with a glass face 
-and a perky needle that always points north."""
-
-
-class Basket(Thing):
-    """
-    This is found in location 5.
-    """
-    name = "basket"
-    nickname = name
-    descrip = """A battered ancient traditional basket, wide and 
-shallow, woven from grass or reeds."""
-
-
-class Bongo_Fruit(Thing):
-    """
-    This is found in location 1.
-    """
-    name = "ripe bongo fruit"
-    nickname = "fruit"
-    descrip = """A pump, extremely ripe purple fruit -- heavy, 
-large, and exuding a delicious fragrance."""
-
-
+if __name__ == "__main__":
+    main(things)
