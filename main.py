@@ -6,21 +6,27 @@
 import locations
 
 def main(starting_loc):
+    inventory = []
+    raft_contents = []
+    carrying_raft = False
+    collections = [inventory, raft_contents, carrying_raft]
+    
     locmap = locations.loc_code_map
-    current_loc = locmap.get(starting_loc)
+    # get current location from the dictionary
+    cur_loc = locmap.get(starting_loc)
     next_loc = ""
     
     while True:
         if next_loc == "":
-            current_loc.enter()
+            cur_loc.enter()
         elif next_loc == None:
-            print "I didn't understand that." 
+            print "I didn't understand that."
         elif len(next_loc) > 2:
             print next_loc
         else:
-            current_loc = locmap.get(next_loc)
-            current_loc.enter()
-        next_loc = current_loc.action()
+            cur_loc = locmap.get(next_loc)
+            cur_loc.enter()
+        next_loc, collections = cur_loc.action(collections)
 
 if __name__ == "__main__":
     main('27')
