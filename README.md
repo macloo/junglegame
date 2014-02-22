@@ -57,3 +57,8 @@ Feb. 13 - The raft works now. You can launch it, with or without items inside it
 
 Feb. 22 - After a long break, I felt ready to tackle some suggestions I got from people on reddit who looked at this. One was to remove the class from main.py and just make it a normal function instead. Another was to get rid of all classes except one for the things in the game (raft, machete, etc.) and just make them instances of the Thing() class. Finally, and most horrible, was eliminating all the global variables. Well, there were not so many, but tracking the inventory list was a nightmare. Probably my solution is quite stupid, since it led to lots of redundancy. But I now have NO global variables, and I think I can still do everything I could do before. At least, everything I have thought of and tested does run without errors. This took several hours.
 
+I learned about this [from YouTube](http://www.youtube.com/watch?v=aXO80T5gsAk&list=PL1DE477438120C9EF&index=30):
+
+    if __name__ == "__main__":
+
+So I added it as a test to both of my subsidiary files: locations and things. It's kind of cool to be able to test them outside the main program.
