@@ -7,7 +7,7 @@ This exercise is supposed to teach us (beginners) more about object-oriented pro
 
 In ex. 43, everything was coded in a single .py file. Now, in ex. 45, we are tasked with using multiple files (modules).
 
-This has been a GREAT learning exercise for working with objects. I had never understood OOP until three weeks ago. Now I understand a lot more. (Probably I am still doing many things wrong.)
+This has been a GREAT learning exercise for working with objects. I had never understood OOP until three weeks before I began this exercise. Now I understand a lot more. (Probably I am still doing many things wrong.)
 
 Granted, this is only a simple game, but in working with variables, lists, and functions in this game, I've learned a ton about how to traverse the classes in my code.
 
@@ -17,7 +17,7 @@ You are a biologist who needs to find a rare fruit tree in the dangerous tropica
 
 ## Current Status
 
-At this point, most "adventures" do not run yet. However, you can: 
+At this point, most "adventures" do not run yet. You can go everywhere without impediments. However, you can:
 
 * Visit all 31 locations, and nothing throws an error.
 * Ride the raft down the river.
@@ -30,6 +30,12 @@ Gameplay:
 * To run the game: python main.py
 * Moving from place to place: n, e, s, and w work in most locations. Sometimes you can use other words too, as suggested by the location description. 
 * You can quit cleanly by typing: exit
+
+## Issues
+
+Biggest issue right now is at location 14. Dealing with raft there.
+
+travel() - Not passing c to this function. I might have to do that.
 
 ## Game History
 
@@ -48,4 +54,6 @@ Feb. 11 - More work on items. Now they can be put into the raft; the raft cannot
 Feb. 12 - Zed says spend a week on this. My week is up. However, before I return to Zed's exercise 45, I want to get the raft into the water. I've got walkthrough capability for all scenes (some do not have descriptions written) and all objects can be picked up, carried, dropped, or put into the raft. Items can be taken out of the raft. The machete can be used in two locations.
 
 Feb. 13 - The raft works now. You can launch it, with or without items inside it. You travel downriver automatically, entering a new location no matter what you do. Then you either die or land safely, depending on your response. The raft lands with you, with all items inside (if they were inside when you launched the raft). Learned more about passing objects into other objects. Possibly inefficient solution to moving the raft downriver.
+
+Feb. 22 - After a long break, I felt ready to tackle some suggestions I got from people on reddit who looked at this. One was to remove the class from main.py and just make it a normal function instead. Another was to get rid of all classes except one for the things in the game (raft, machete, etc.) and just make them instances of the Thing() class. Finally, and most horrible, was eliminating all the global variables. Well, there were not so many, but tracking the inventory list was a nightmare. Probably my solution is quite stupid, since it led to lots of redundancy. But I now have NO global variables, and I think I can still do everything I could do before. At least, everything I have thought of and tested does run without errors. This took several hours.
 
