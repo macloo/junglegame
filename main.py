@@ -1,30 +1,26 @@
-from sys import exit
+# not surprisingly, the game starts here
+# locations are in a dictionary; keys are a two-digit string
+# originally this was a class but I was advised to change it
+# because there's no reason for it to be a class
 
 import locations
 
-class Engine(object):
-    """
-    Runs the game by moving you from one location to the next. That's
-    really all it does. All actions take place in the location classes.
-    """
+def main(starting_loc):
+    locmap = locations.loc_code_map
+    current_loc = locmap.get(starting_loc)
+    next_loc = ""
+    
+    while True:
+        if next_loc == "":
+            current_loc.enter()
+        elif next_loc == None:
+            print "I didn't understand that." 
+        elif len(next_loc) > 2:
+            print next_loc
+        else:
+            current_loc = locmap.get(next_loc)
+            current_loc.enter()
+        next_loc = current_loc.action()
 
-    def play(self, starting_loc):
-        locmap = locations.loc_code_map
-        current_loc = locmap.get(starting_loc)
-        next_loc = ""
-
-        while True:
-            if next_loc == "":
-                current_loc.enter()
-            elif next_loc == None:
-                print "I didn't understand that."
-                # exit() 
-            elif len(next_loc) > 2:
-                print next_loc 
-            else:
-                current_loc = locmap.get(next_loc)
-                current_loc.enter()
-            next_loc = current_loc.action()
-
-thegame = Engine()
-thegame.play('27')
+if __name__ == "__main__":
+    main('27')
